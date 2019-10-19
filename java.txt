@@ -1,0 +1,35 @@
+import java.security.Security;
+import java.io.*;
+
+
+public class SHA1 
+{
+	public static void main(String[] args) throws Exception
+	{
+		FileInputStream fstream = new FileInputStream("textfile.txt");
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String strLine;
+		strLine= br.readLine();
+		
+		byte[] input = strLine.getBytes();
+		System.out.println("input : " + new String(input));
+		MessageDigest hash = MessageDigest.getInstance("SHA1");
+		ByteArrayInputStream bIn = new ByteArrayInputStream(input);
+		DigestInputStream dIn = new DigestInputStream(bIn,  hash);
+		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+
+		int ch;
+		while ((ch= dIn.read())>=0)
+		{
+			bOut.write(ch);
+		}
+		
+		byte[] newInput = bOut.toByteArray();
+		System.out.println("in digest : " + new String(dIn.getMessageDigest().digest()));
+		DigestOutputStream dOut = new DigestOutputStream( new ByteArrayOutputStream(), hash);
+		dOut.write(newInput);
+		dOut.close();
+	System.out.println("out digest : " + new String(dOut.getMessageDigest().digest());
+	}
+}
